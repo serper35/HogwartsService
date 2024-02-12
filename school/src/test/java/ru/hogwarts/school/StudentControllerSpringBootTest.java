@@ -2,6 +2,7 @@ package ru.hogwarts.school;
 
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,6 +12,7 @@ import org.springframework.http.*;
 import ru.hogwarts.school.controller.StudentController;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repositories.StudentRepository;
 import ru.hogwarts.school.service.StudentService;
 
 import java.util.List;
@@ -28,6 +30,9 @@ class StudentControllerSpringBootTest {
 	private StudentService studentService;
 
 	@Autowired
+	private StudentRepository studentRepository;
+
+	@Autowired
 	private TestRestTemplate testRestTemplate;
 
 	private final String url = "http://localhost:" + port + "/student?idFac=1";
@@ -42,52 +47,82 @@ class StudentControllerSpringBootTest {
 		String url = "http://localhost:" + port + "/student";
 		Student student = new Student(100L, "Vlad", 27, 1);
 		Assertions.assertThat(this.testRestTemplate.postForObject(url, student, String.class)).isNotEmpty();
+		studentRepository.delete(student);
 	}
 
 	@Test
 	public void testGetAll() throws Exception {
+		Student student = new Student(100L, "Vlad", 27, 1);
+		studentRepository.save(student);
 		Assertions.assertThat(this.testRestTemplate.getForObject("http://localhost:" + port + "/student", String.class)).isNotEmpty();
+		studentRepository.delete(student);
 	}
 
 	@Test
 	public void testPut() throws Exception {
+		Student student = new Student(100L, "Vlad", 27, 1);
+		studentRepository.save(student);
+
 		String url = "http://localhost:" + port + "/student";
-		Student student = new Student(100L, "Vladimir", 50, 1);
+		Student studentUpd = new Student(100L, "Vladimir", 50, 1);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<Student> requestEntity = new HttpEntity<>(student, headers);
-		ResponseEntity<Student> response = this.testRestTemplate.exchange(url, HttpMethod.PUT, requestEntity, Student.class, 100L);
+		HttpEntity<Student> requestEntity = new HttpEntity<>(studentUpd, headers);
+		ResponseEntity<Student> response = this.testRestTemplate.exchange(url, HttpMethod.PUT, requestEntity, Student.class, student.getId());
 		Assertions.assertThat(response).isNotNull();
+		studentRepository.deleteById(student.getId());
 	}
 
 	@Test
 	public void testGet() throws Exception {
+		Student student = new Student(100L, "Vlad", 27, 1);
+		studentRepository.save(student);
+
 		String url = "http://localhost:" + port + "/student/{id}";
-		Assertions.assertThat(testRestTemplate.getForObject(url, Student.class, 100L)).isNotNull();
+		Assertions.assertThat(testRestTemplate.getForObject(url, Student.class, student.getId())).isNotNull();
+		studentRepository.deleteById(student.getId());
 	}
 
     @Test
     public void testGetStudentByAge() throws Exception {
-        String url = "http://localhost:" + port + "/student/getAge?age=50";
+		Student student = new Student(100L, "Vlad", 27, 1);
+		studentRepository.save(student);
+
+        String url = "http://localhost:" + port + "/student/getAge?age=27";
         Assertions.assertThat(testRestTemplate.getForObject(url, List.class)).isNotNull();
+
+		studentRepository.deleteById(student.getId());
     }
 
     @Test
     public void testGetAgeBetween() {
+		Student student = new Student(100L, "Vlad", 27, 1);
+		studentRepository.save(student);
+
         String url = "http://localhost:" + port + "/student/getAgeBetween?minAge=26&maxAge=100";
         Assertions.assertThat(testRestTemplate.getForObject(url, List.class)).isNotNull();
-    }
+
+		studentRepository.deleteById(student.getId());
+	}
 
 	@Test
 	public void testGetFaculty() throws Exception {
+		Student student = new Student(100L, "Vlad", 27, 1);
+		studentRepository.save(student);
+
 		String url = "http://localhost:" + port + "/student/{id}/faculty";
-		Assertions.assertThat(testRestTemplate.getForObject(url, Faculty.class, 1)).isNotNull();
+		Assertions.assertThat(testRestTemplate.getForObject(url, Faculty.class, student.getFacultyId())).isNotNull();
+
+		studentRepository.deleteById(student.getId());
 	}
 
 	@Test
 	public void testDelete() throws Exception {
+		Student student = new Student(100L, "Vlad", 27, 1);
+		studentRepository.save(student);
+
 		String url = "http://localhost:" + port + "/student/{id}";
-		ResponseEntity<Void> response = testRestTemplate.exchange(url, HttpMethod.DELETE, null, Void.class, 100L);
+		ResponseEntity<Void> response = testRestTemplate.exchange(url, HttpMethod.DELETE, null, Void.class, student.getId());
 		boolean result = response.getStatusCode().is2xxSuccessful();
 		Assertions.assertThat(result).isTrue();
 	}
