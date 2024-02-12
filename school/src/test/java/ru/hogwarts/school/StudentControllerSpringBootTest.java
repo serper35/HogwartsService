@@ -38,32 +38,24 @@ class StudentControllerSpringBootTest {
 	}
 
 	@Test
-	public void testGetAll() throws Exception {
-		Assertions.assertThat(this.testRestTemplate.getForObject("http://localhost:" + port + "/student", String.class)).isNotEmpty();
-	}
-
-	@Test
 	public void testPost() throws Exception {
 		Student student = new Student(100L, "Vlad", 27, 1);
 		Assertions.assertThat(this.testRestTemplate.postForObject(url, student, String.class)).isNotEmpty();
 	}
 
 	@Test
+	public void testGetAll() throws Exception {
+		Assertions.assertThat(this.testRestTemplate.getForObject("http://localhost:" + port + "/student", String.class)).isNotEmpty();
+	}
+
+	@Test
 	public void testPut() throws Exception {
-		Student student = new Student(100L, "Vladfgdfgdfgd", 27865, 1);
+		Student student = new Student(100L, "Vladimir", 50, 1);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Student> requestEntity = new HttpEntity<>(student, headers);
 		ResponseEntity<Student> response = this.testRestTemplate.exchange(url, HttpMethod.PUT, requestEntity, Student.class, 100L);
 		Assertions.assertThat(response).isNotNull();
-	}
-
-	@Test
-	public void testDelete() throws Exception {
-		String url = "http://localhost:" + port + "/student/{id}";
-		ResponseEntity<Void> response = testRestTemplate.exchange(url, HttpMethod.DELETE, null, Void.class, 100L);
-		boolean result = response.getStatusCode().is2xxSuccessful();
-		Assertions.assertThat(result).isTrue();
 	}
 
 	@Test
@@ -74,7 +66,7 @@ class StudentControllerSpringBootTest {
 
     @Test
     public void testGetStudentByAge() throws Exception {
-        String url = "http://localhost:" + port + "/student/getAge?age=26";
+        String url = "http://localhost:" + port + "/student/getAge?age=50";
         Assertions.assertThat(testRestTemplate.getForObject(url, List.class)).isNotNull();
     }
 
@@ -88,5 +80,13 @@ class StudentControllerSpringBootTest {
 	public void testGetFaculty() throws Exception {
 		String url = "http://localhost:" + port + "/student/{id}/faculty";
 		Assertions.assertThat(testRestTemplate.getForObject(url, Faculty.class, 1)).isNotNull();
+	}
+
+	@Test
+	public void testDelete() throws Exception {
+		String url = "http://localhost:" + port + "/student/{id}";
+		ResponseEntity<Void> response = testRestTemplate.exchange(url, HttpMethod.DELETE, null, Void.class, 100L);
+		boolean result = response.getStatusCode().is2xxSuccessful();
+		Assertions.assertThat(result).isTrue();
 	}
 }

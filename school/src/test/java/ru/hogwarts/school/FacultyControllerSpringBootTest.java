@@ -39,22 +39,22 @@ public class FacultyControllerSpringBootTest {
     }
 
     @Test
-    public void testGetAll() throws Exception {
+    public void testAdd() throws Exception {
         String url = "http://localhost:" + port + "/faculty";
-        assertThat(testRestTemplate.getForObject(url, List.class)).isNotNull();
+        Faculty faculty = new Faculty(5L, "Ravenclaw", "brown");
+        assertThat(testRestTemplate.postForObject(url, faculty, Faculty.class)).isNotNull();
     }
 
     @Test
     public void testGet() throws Exception {
         String url = "http://localhost:" + port + "/faculty/{id}";
-        assertThat(testRestTemplate.getForObject(url, Faculty.class, 1)).isNotNull();
+        assertThat(testRestTemplate.getForObject(url, Faculty.class, 5)).isNotNull();
     }
 
     @Test
-    public void testAdd() throws Exception {
+    public void testGetAll() throws Exception {
         String url = "http://localhost:" + port + "/faculty";
-        Faculty faculty = new Faculty(5L, "Ravenclaw", "brown");
-        assertThat(testRestTemplate.postForObject(url, faculty, Faculty.class)).isNotNull();
+        assertThat(testRestTemplate.getForObject(url, List.class)).isNotNull();
     }
 
     @Test
@@ -71,17 +71,8 @@ public class FacultyControllerSpringBootTest {
     }
 
     @Test
-    public void testDelete() throws Exception {
-        String url = "http://localhost:" + port + "/faculty";
-        ResponseEntity<Void> response = (testRestTemplate.exchange(url, HttpMethod.DELETE, null, void.class, 5));
-
-        assertThat(response).isNotNull();
-    }
-
-    @Test
     public void testGetByColor() throws Exception {
-        Faculty faculty = new Faculty(2L, "Slyth", "Green");
-        String url = "http://localhost:" + port + "/faculty/getByColor?color=Green";
+        String url = "http://localhost:" + port + "/faculty/getByColor?color=black";
 
         ResponseEntity<List> response = testRestTemplate.getForEntity(url, List.class);
         assertThat(response).isNotNull();
@@ -89,14 +80,22 @@ public class FacultyControllerSpringBootTest {
 
     @Test
     public void testGetByNameIgnoreCaseOrGetByColorIgnoreCase() throws Exception {
-        String url = "http://localhost:" + port + "/faculty/getByNameIgnoreCaseOrGetByColorIgnoreCase?name=Slyth&color=Green";
+        String url = "http://localhost:" + port + "/faculty/getByNameIgnoreCaseOrGetByColorIgnoreCase?name=Ravenclaw&color=black";
         assertThat(testRestTemplate.getForObject(url, List.class)).isNotNull();
     }
 
     @Test
     public void testGetStudentsByFaculty() throws Exception {
         String url = "http://localhost:" + port + "/faculty/{id}/students";
-        Assertions.assertThat(testRestTemplate.getForObject(url, List.class, 1)).isNotNull();
+        Assertions.assertThat(testRestTemplate.getForObject(url, List.class, 5)).isNotNull();
 
+    }
+
+    @Test
+    public void testDelete() throws Exception {
+        String url = "http://localhost:" + port + "/faculty";
+        ResponseEntity<Void> response = (testRestTemplate.exchange(url, HttpMethod.DELETE, null, void.class, 5));
+
+        assertThat(response).isNotNull();
     }
 }
