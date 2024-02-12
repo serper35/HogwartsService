@@ -39,6 +39,7 @@ class StudentControllerSpringBootTest {
 
 	@Test
 	public void testPost() throws Exception {
+		String url = "http://localhost:" + port + "/student";
 		Student student = new Student(100L, "Vlad", 27, 1);
 		Assertions.assertThat(this.testRestTemplate.postForObject(url, student, String.class)).isNotEmpty();
 	}
@@ -50,6 +51,7 @@ class StudentControllerSpringBootTest {
 
 	@Test
 	public void testPut() throws Exception {
+		String url = "http://localhost:" + port + "/student";
 		Student student = new Student(100L, "Vladimir", 50, 1);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
