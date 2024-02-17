@@ -2,7 +2,7 @@ package ru.hogwarts.school.mapper;
 
 import org.springframework.stereotype.Component;
 import ru.hogwarts.school.model.Avatar;
-import ru.hogwarts.school.response.AvatarDTO;
+import ru.hogwarts.school.DTO.AvatarDTO;
 
 @Component
 public class AvatarMapper {

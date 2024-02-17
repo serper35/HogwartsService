@@ -2,8 +2,6 @@ package ru.hogwarts.school.service;
 
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
-import ru.hogwarts.school.response.AvgAgeOfStudents;
-import ru.hogwarts.school.response.SumOfStudents;
 //import ru.hogwarts.school.response.LastFiveStudentsGroupByAge;
 
 import java.util.Collection;
@@ -26,9 +24,9 @@ public interface StudentService {
 
     Collection<Student> getAll();
 
-    List<SumOfStudents> getSumOfStudents();
+    int getSumOfStudents();
 
-    List<AvgAgeOfStudents>  getAvgAgeOfStudents();
+    double  getAvgAgeOfStudents();
 
     List<Student> getLastFiveStudentsGroupById();
 }

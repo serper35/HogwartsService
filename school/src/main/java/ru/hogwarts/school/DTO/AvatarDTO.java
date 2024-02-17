@@ -1,10 +1,4 @@
-package ru.hogwarts.school.response;
-
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
-import jakarta.persistence.OneToOne;
-import ru.hogwarts.school.model.Student;
+package ru.hogwarts.school.DTO;
 
 import java.util.Objects;
 

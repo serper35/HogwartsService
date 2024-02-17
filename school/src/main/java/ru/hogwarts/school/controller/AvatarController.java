@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.mapper.AvatarMapper;
 import ru.hogwarts.school.model.Avatar;
-import ru.hogwarts.school.response.AvatarDTO;
+import ru.hogwarts.school.DTO.AvatarDTO;
 import ru.hogwarts.school.service.AvatarService;
 
 import java.io.IOException;
