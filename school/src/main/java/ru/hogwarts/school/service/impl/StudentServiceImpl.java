@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repositories.StudentRepository;
+//import ru.hogwarts.school.response.LastFiveStudentsGroupByAge;
+import ru.hogwarts.school.response.AvgAgeOfStudents;
+import ru.hogwarts.school.response.SumOfStudents;
 import ru.hogwarts.school.service.FacultyService;
 import ru.hogwarts.school.service.StudentService;
 
@@ -58,4 +61,18 @@ public class StudentServiceImpl implements StudentService {
     public Faculty getFaculty(Long id) {
         return studentRepository.findById(id).get().getFacultyId();
     }
+
+    public List<SumOfStudents> getSumOfStudents() {
+        return studentRepository.getSumOfStudents();
+    }
+
+    public List<AvgAgeOfStudents>  getAvgAgeOfStudents() {
+        return studentRepository.getAvgAgeOfStudents();
+    }
+
+    public List<Student> getLastFiveStudentsGroupById() {
+        return studentRepository.getLastFiveStudentsGroupById();
+    }
+
+
 }
